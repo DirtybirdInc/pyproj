@@ -4,3 +4,5 @@ htmlcov/
 .pytest_cache/
 .idea/
 __pycache__/
+coverage.xml
+test-reports/

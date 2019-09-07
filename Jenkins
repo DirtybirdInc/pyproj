@@ -7,11 +7,10 @@ pipeline {
     }
 
     stages {
-        stage('Test') {
+        stage('Run Tests') {
             steps {
                 sh 'pip install -r requirements.txt'
                 sh 'py.test --verbose --cov-report html --cov-report xml --cov=myapp --junit-xml test-reports/results.xml tests/'
-                sh 'python analyze_code_coverage.py'
 	        }
             post {
                 always {
@@ -27,5 +26,11 @@ pipeline {
                 }
             }
         }
+        stage('Validate Coverage') {
+            steps {
+                sh 'python analyze_code_coverage.py'
+	        }
+        }
+
     }
 }
