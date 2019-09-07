@@ -1,0 +1,31 @@
+pipeline {
+
+    agent any
+
+    stages {
+        stage('Test') {
+            agent {
+                docker {
+                    image 'python:3.7.4-alpine3.10'
+                }
+            }
+            steps {
+                sh 'pip install requirements.txt'
+                sh 'py.test --verbose --cov-report term --cov-report html --cov=myapp --junit-xml test-reports/results.xml tests/'
+	        }
+            post {
+                always {
+                    junit 'test-reports/results.xml'
+                    publishHTML target: [
+                            allowMissing         : false,
+                            alwaysLinkToLastBuild: false,
+                            keepAll              : true,
+                            reportDir            : 'htmlcov',
+                            reportFiles          : '',
+                            reportName           : 'Test Report'
+                        ]
+                }
+            }
+        }
+    }
+}
