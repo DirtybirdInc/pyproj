@@ -10,7 +10,8 @@ pipeline {
         stage('Test') {
             steps {
                 sh 'pip install -r requirements.txt'
-                sh 'py.test --verbose --cov-report term --cov-report html --cov=myapp --junit-xml test-reports/results.xml tests/'
+                sh 'py.test --verbose --cov-report html --cov=myapp --junit-xml test-reports/results.xml tests/'
+                sh 'python analyze_code_coverage.py'
 	        }
             post {
                 always {
@@ -21,7 +22,7 @@ pipeline {
                             keepAll              : true,
                             reportDir            : 'htmlcov',
                             reportFiles          : 'index.html',
-                            reportName           : 'Coverage Report'
+                            reportName           : 'Code Coverage Report'
                         ]
                 }
             }

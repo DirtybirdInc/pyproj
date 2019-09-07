@@ -1,0 +1,2 @@
+def bass():
+    return "wwWWwwwWWWw"
