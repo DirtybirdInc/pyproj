@@ -2,3 +2,4 @@ venv/
 htmlcov/
 .coverage
 .pytest_cache/
+.idea/
