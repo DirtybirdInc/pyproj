@@ -21,7 +21,7 @@ pipeline {
                             keepAll              : true,
                             reportDir            : 'htmlcov',
                             reportFiles          : '',
-                            reportName           : 'Test Report'
+                            reportName           : 'Coverage Report'
                         ]
                 }
             }
