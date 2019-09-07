@@ -19,8 +19,8 @@ pipeline {
                             allowMissing         : false,
                             alwaysLinkToLastBuild: false,
                             keepAll              : true,
-                            reportDir            : '',
-                            reportFiles          : 'htmlcov/index.html',
+                            reportDir            : 'htmlcov',
+                            reportFiles          : 'index.html',
                             reportName           : 'Coverage Report'
                         ]
                 }
