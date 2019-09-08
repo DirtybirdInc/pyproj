@@ -1,4 +1,12 @@
-echo issueComment.body
+def triggerCause = currentBuild.rawBuild.getCause()
+
+if (triggerCause) {
+    echo("Build was started by ${triggerCause.userLogin}, who wrote: " +
+         "\"${triggerCause.comment}\", which matches the " +
+         "\"${triggerCause.triggerPattern}\" trigger pattern.")
+} else {
+    echo('Build was not started by a trigger')
+}
 
 pipeline {
 
