@@ -39,13 +39,12 @@ pipeline {
         }
         stage('Validate Coverage') {
             steps {
-                try {
-                    sh 'python analyze_code_coverage.py'
-                    setBuildStatus("Code coverage is OK", "SUCCESS");
-                } catch (err) {
-                    setBuildStatus("Code coverage is bad", "ERROR");
-                    throw err
-                }
+                sh 'python analyze_code_coverage.py'
+	        }
+        }
+        stage('Validate Coverage') {
+            steps {
+                setBuildStatus("Code coverage is OK", "SUCCESS");
 	        }
         }
     }
