@@ -42,7 +42,7 @@ pipeline {
                 sh 'python analyze_code_coverage.py'
 	        }
         }
-        stage('Validate Coverage') {
+        stage('Update Git') {
             steps {
                 setBuildStatus("Code coverage is OK", "SUCCESS");
 	        }
