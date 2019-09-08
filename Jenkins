@@ -1,3 +1,14 @@
+
+void setBuildStatus(String message, String state) {
+  step([
+      $class: "GitHubCommitStatusSetter",
+      reposSource: [$class: "ManuallyEnteredRepositorySource", url: "https://github.com/DirtybirdInc/pyproj"],
+      contextSource: [$class: "ManuallyEnteredCommitContextSource", context: "ci/jenkins/build-status"],
+      errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
+      statusResultSource: [ $class: "ConditionalStatusResultSource", results: [[$class: "AnyBuildResult", message: message, state: state]] ]
+  ]);
+}
+
 pipeline {
 
     agent {
@@ -5,18 +16,6 @@ pipeline {
             image 'python:3.7.4-alpine3.10'
         }
     }
-
-    void setBuildStatus(String message, String state) {
-      step([
-          $class: "GitHubCommitStatusSetter",
-          reposSource: [$class: "ManuallyEnteredRepositorySource", url: "https://github.com/DirtybirdInc/pyproj"],
-          contextSource: [$class: "ManuallyEnteredCommitContextSource", context: "ci/jenkins/build-status"],
-          errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
-          statusResultSource: [ $class: "ConditionalStatusResultSource", results: [[$class: "AnyBuildResult", message: message, state: state]] ]
-      ]);
-    }
-
-
 
     stages {
         stage('Run Tests') {
