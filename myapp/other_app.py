@@ -1,2 +1,0 @@
-def bass():
-    return "wwWWwwwWWWw"
