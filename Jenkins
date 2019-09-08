@@ -1,4 +1,4 @@
-echo IssueComment.body
+echo issueComment.body
 
 pipeline {
 
