@@ -28,9 +28,25 @@ pipeline {
         }
         stage('Validate Coverage') {
             steps {
-                sh 'python analyze_code_coverage.py'
+                try {
+                    sh 'python analyze_code_coverage.py'
+                    if (env.CHANGE_ID) {
+                        pullRequest.createStatus(status: 'success',
+                             context: 'continuous-integration/jenkins/pr-merge/tests',
+                             description: 'Code coverage is good',
+                             targetUrl: "${env.JOB_URL}/testResults")
+                    }
+                } catch (err) {
+                    // CHANGE_ID is set only for pull requests, so it is safe to access the pullRequest global variable
+                    if (env.CHANGE_ID) {
+                        pullRequest.createStatus(status: 'failure',
+                             context: 'continuous-integration/jenkins/pr-merge/tests',
+                             description: 'Code coverage is bad',
+                             targetUrl: "${env.JOB_URL}/testResults")
+                    }
+                    throw err
+                }
 	        }
         }
-
     }
 }
