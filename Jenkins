@@ -39,8 +39,7 @@ pipeline {
             steps {
                 script {
                     sh 'apk --no-cache add curl'
-                    passed = sh(script: 'python analyze_code_coverage.py', returnStdout: true).trim().toBoolean()
-                    echo passed
+                    passed = sh(script: 'python analyze_code_coverage.py', returnStdout: true).trim()
                     if (passed = "True") {
                         updateCommitStatus('success', 'Test coverage is OK.')
                     } else {
