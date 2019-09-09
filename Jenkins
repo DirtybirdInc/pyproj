@@ -40,13 +40,16 @@ pipeline {
             }
         }
         stage('Validate Coverage') {
+
             steps {
-                sh 'apk --no-cache add curl'
-                try {
-                    sh 'python analyze_code_coverage.py'
-                    updateCommitStatus(true)
-                } catch (Exception ex) {
-                    updateCommitStatus(false)
+                script {
+                    sh 'apk --no-cache add curl'
+                    try {
+                        sh 'python analyze_code_coverage.py'
+                        updateCommitStatus(true)
+                    } catch (Exception e) {
+                        updateCommitStatus(false)
+                    }
                 }
             }
         }
