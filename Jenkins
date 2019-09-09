@@ -33,7 +33,6 @@ pipeline {
         stage('Validate Coverage') {
             steps {
                 sh 'python analyze_code_coverage.py'
-                sh 'curl "https://api.github.com/repos/DirtybirdInc/pyproj/statuses/$GIT_COMMIT?access_token=$GITHUB_TOKEN" -H "Content-Type: application/json" -X POST -d "{\"state\": \"success\",\"context\": \"continuous-integration/jenkins/test-coverage\", \"description\": \"Test coverage is OK\", \"target_url\": \"http://192.168.99.100:8088/job/pyproj/job/master/$BUILD_NUMBER/Code_20Coverage_20Report\"}"'
             }
         }
     }
