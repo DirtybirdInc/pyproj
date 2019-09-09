@@ -6,6 +6,15 @@ def updateCommitStatus() {
     }
 }
 
+def checkCodeCoverage() {
+    try {
+        sh 'python analyze_code_coverage.py'
+        return true
+    } catch(Exception ex) {
+        return false
+    }
+}
+
 def codeCoveragePassed = false
 
 pipeline {
@@ -43,12 +52,7 @@ pipeline {
         stage('Validate Coverage') {
             steps {
                 sh 'apk --no-cache add curl'
-                try {
-                    sh 'python analyze_code_coverage.py'
-                    codeCoveragePassed = true
-                } catch(Exception ex) {
-                    codeCoveragePassed = false
-                }
+                codeCoveragePassed = checkCodeCoverage()
             }
         }
     }
