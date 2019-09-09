@@ -42,7 +42,7 @@ pipeline {
                 try {
                     sh 'python analyze_code_coverage.py'
                     codeCoveragePassed = true
-                } except {
+                } catch {
                     codeCoveragePassed = false
                 }
             }
