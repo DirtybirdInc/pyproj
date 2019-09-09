@@ -39,11 +39,12 @@ pipeline {
         stage('Validate Coverage') {
             steps {
                 sh 'python analyze_code_coverage.py'
+                curl "https://api.GitHub.com/repos/Dirtybird77/pyproj/statuses/$GIT_COMMIT?access_token=76f114efa53b1db51f1071481896a4695e07fd8b" -H "Content-Type: application/json" -X POST -d "{\"state\": \"success\",\"context\": \"continuous-integration/jenkins\", \"description\": \"Jenkins\", \"target_url\": \"http://192.168.99.100:8088/blue/organizations/jenkins/pyproj/detail/master/$BUILD_NUMBER/pipeline\"}"
+
 	        }
 	        post {
                 success {
                     echo "Code coverage is good!"
-                    curl "https://api.GitHub.com/repos/Dirtybird77/pyproj/statuses/$GIT_COMMIT?access_token=76f114efa53b1db51f1071481896a4695e07fd8b" -H "Content-Type: application/json" -X POST -d "{\"state\": \"success\",\"context\": \"continuous-integration/jenkins\", \"description\": \"Jenkins\", \"target_url\": \"http://192.168.99.100:8088/blue/organizations/jenkins/pyproj/detail/master/$BUILD_NUMBER/pipeline\"}"
                 }
                 failure {
                     echo "Code coverage is bad!"
