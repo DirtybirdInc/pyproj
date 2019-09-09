@@ -42,9 +42,11 @@ pipeline {
 	        }
 	        post {
                 success {
+                    echo "Code coverage is good!"
                     setBuildStatus("Build succeeded", "SUCCESS");
                 }
                 failure {
+                    echo "Code coverage is bad!"
                     setBuildStatus("Build failed", "FAILURE");
                 }
             }
