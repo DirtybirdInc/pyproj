@@ -40,7 +40,6 @@ pipeline {
             }
         }
         stage('Validate Coverage') {
-
             steps {
                 script {
                     sh 'apk --no-cache add curl'
