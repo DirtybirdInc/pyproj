@@ -3,7 +3,7 @@ pipeline {
 
     agent {
         docker {
-            image 'byrnedo:docker-alpine-curl'
+            image 'byrnedo/docker-alpine-curl'
         }
     }
 
