@@ -1,8 +1,9 @@
 pipeline {
 
+
     agent {
         docker {
-            image 'python:3.7.4-alpine3.10'
+            image 'byrnedo:docker-alpine-curl'
         }
     }
 
@@ -11,6 +12,11 @@ pipeline {
     }
 
     stages {
+        agent {
+            docker {
+                image 'python:3.7.4-alpine3.10'
+            }
+        }
         stage('Run Tests') {
             steps {
                 sh 'pip install -r requirements.txt'
