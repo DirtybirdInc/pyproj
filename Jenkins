@@ -42,7 +42,7 @@ pipeline {
                 try {
                     sh 'python analyze_code_coverage.py'
                     codeCoveragePassed = true
-                } catch {
+                } catch(Exception ex) {
                     codeCoveragePassed = false
                 }
             }
@@ -50,10 +50,11 @@ pipeline {
     }
     post {
         success {
-            createCommitStatus("success", "Test coverage is OK")
-        }
-        failure {
-            createCommitStatus("failure", "Test coverage is BAD")
+            if (codeCoveragePassed) {
+                createCommitStatus("success", "Test coverage is OK")
+            } else {
+                createCommitStatus("failure", "Test coverage is BAD")
+            }
         }
     }
 }
