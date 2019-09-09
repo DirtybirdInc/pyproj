@@ -24,7 +24,7 @@ pipeline {
                 sh 'py.test --verbose --cov-report html --cov-report xml --cov=myapp --junit-xml test-reports/results.xml tests/'
 	        }
             post {
-                always {
+                success {
                     junit 'test-reports/results.xml'
                     publishHTML target: [
                             allowMissing         : false,
