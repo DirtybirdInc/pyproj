@@ -50,7 +50,7 @@ pipeline {
     }
     post {
         success {
-            if (codeCoveragePassed) {
+            if (codeCoveragePassed == true) {
                 createCommitStatus("success", "Test coverage is OK")
             } else {
                 createCommitStatus("failure", "Test coverage is BAD")
