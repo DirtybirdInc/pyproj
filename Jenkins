@@ -6,10 +6,6 @@ pipeline {
         }
     }
 
-    environment {
-        GITHUB_TOKEN = credentials('github-commit-status')
-    }
-
     stages {
         stage('Run Tests') {
             steps {
