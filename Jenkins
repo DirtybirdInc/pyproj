@@ -1,13 +1,4 @@
-def updateCommitStatus(passed) {
-    String state
-    String message
-    if (passed == true) {
-        state = "success"
-        message = "Test coverage is OK."
-    } else {
-        state = "failure"
-        message = "Test coverage is BAD."
-    }
+def updateCommitStatus(state, message) {
     sh 'curl "https://api.github.com/repos/DirtybirdInc/pyproj/statuses/$GIT_COMMIT?access_token=$GITHUB_TOKEN" -H "Content-Type: application/json" -X POST -d \'{"state": "' + state + '", "context": "continuous-integration/jenkins/test-coverage", "description": "' + message + '", "target_url": "http://192.168.99.100:8088/job/pyproj/job/master/'+BUILD_NUMBER+'/Code_20Coverage_20Report"}\''
 }
 
@@ -34,13 +25,13 @@ pipeline {
                 success {
                     junit 'test-reports/results.xml'
                     publishHTML target: [
-                            allowMissing         : false,
-                            alwaysLinkToLastBuild: false,
-                            keepAll              : true,
-                            reportDir            : 'htmlcov',
-                            reportFiles          : 'index.html',
-                            reportName           : 'Code Coverage Report'
-                        ]
+                        allowMissing         : false,
+                        alwaysLinkToLastBuild: false,
+                        keepAll              : true,
+                        reportDir            : 'htmlcov',
+                        reportFiles          : 'index.html',
+                        reportName           : 'Code Coverage Report'
+                    ]
                 }
             }
         }
@@ -50,9 +41,9 @@ pipeline {
                     sh 'apk --no-cache add curl'
                     try {
                         sh 'python analyze_code_coverage.py'
-                        updateCommitStatus(true)
+                        updateCommitStatus('success', 'Test coverage is OK.')
                     } catch (Exception e) {
-                        updateCommitStatus(false)
+                        updateCommitStatus('failure', 'Test coverage is BAD.')
                     }
                 }
             }
