@@ -10,7 +10,7 @@ def checkCodeCoverage() {
     try {
         sh 'python analyze_code_coverage.py'
         return true
-    } catch(Exception ex) {
+    } catch (Exception ex) {
         return false
     }
 }
