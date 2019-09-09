@@ -12,3 +12,9 @@ def my_next_func():
 
 def my_other_next_func():
     return "Hallo Welt!"
+
+
+
+
+def my_other_next2_func():
+    return "Hallo Welt!"
