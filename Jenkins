@@ -1,13 +1,3 @@
-void setBuildStatus(String message, String state) {
-  step([
-      $class: "GitHubCommitStatusSetter",
-      reposSource: [$class: "ManuallyEnteredRepositorySource", url: env.GIT_URL],
-      contextSource: [$class: "ManuallyEnteredCommitContextSource", context: "ci/jenkins/build-status"],
-      errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
-      statusResultSource: [ $class: "ConditionalStatusResultSource", results: [[$class: "AnyBuildResult", message: message, state: state]] ]
-  ]);
-}
-
 pipeline {
 
     agent {
@@ -39,17 +29,14 @@ pipeline {
         stage('Validate Coverage') {
             steps {
                 sh 'python analyze_code_coverage.py'
-                sh 'curl "https://api.GitHub.com/repos/Dirtybird77/pyproj/statuses/$GIT_COMMIT?access_token=76f114efa53b1db51f1071481896a4695e07fd8b" -H "Content-Type: application/json" -X POST -d "{\"state\": \"success\",\"context\": \"continuous-integration/jenkins\", \"description\": \"Jenkins\", \"target_url\": \"http://192.168.99.100:8088/blue/organizations/jenkins/pyproj/detail/master/$BUILD_NUMBER/pipeline\"}"'
-
-	        }
+            }
 	        post {
                 success {
-                    echo "Code coverage is good!"
-                }
+                    sh 'curl "https://api.github.com/repos/DirtybirdInc/pyproj/statuses/$GIT_COMMIT?access_token=39934d2eb18002d0d3604c150b9b8fba5c460e41" -H "Content-Type: application/json" -X POST -d "{\"state\": \"success\",\"context\": \"continuous-integration/jenkins/test-coverage\", \"description\": \"Test coverage is OK\", \"target_url\": \"http://192.168.99.100:8088/job/pyproj/job/master/$BUILD_NUMBER/Code_20Coverage_20Report\"}"'
+	            }
                 failure {
-                    echo "Code coverage is bad!"
-                    setBuildStatus("Build failed", "FAILURE");
-                }
+                    sh 'curl "https://api.github.com/repos/DirtybirdInc/pyproj/statuses/$GIT_COMMIT?access_token=39934d2eb18002d0d3604c150b9b8fba5c460e41" -H "Content-Type: application/json" -X POST -d "{\"state\": \"failure\",\"context\": \"continuous-integration/jenkins/test-coverage\", \"description\": \"Test coverage is BAD\", \"target_url\": \"http://192.168.99.100:8088/job/pyproj/job/master/$BUILD_NUMBER/Code_20Coverage_20Report\"}"'
+	            }
             }
         }
     }
