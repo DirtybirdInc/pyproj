@@ -15,7 +15,7 @@ def checkCodeCoverage() {
     }
 }
 
-def codeCoveragePassed = false
+codeCoveragePassed = false
 
 pipeline {
 
