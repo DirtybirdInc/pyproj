@@ -3,7 +3,7 @@ pipeline {
 
     agent {
         docker {
-            image 'byrnedo/docker-alpine-curl'
+            image 'python:3.7.4-alpine3.10'
         }
     }
 
@@ -12,13 +12,7 @@ pipeline {
     }
 
     stages {
-
         stage('Run Tests') {
-            agent {
-                docker {
-                    image 'python:3.7.4-alpine3.10'
-                }
-            }
             steps {
                 sh 'pip install -r requirements.txt'
                 sh 'py.test --verbose --cov-report html --cov-report xml --cov=myapp --junit-xml test-reports/results.xml tests/'
@@ -39,13 +33,18 @@ pipeline {
         }
         stage('Validate Coverage') {
             steps {
+                sh 'apk --no-cache add curl'
                 sh 'python analyze_code_coverage.py'
+
             }
         }
     }
     post {
         success {
             sh 'curl "https://api.github.com/repos/DirtybirdInc/pyproj/statuses/$GIT_COMMIT?access_token=$GITHUB_TOKEN" -H "Content-Type: application/json" -X POST -d "{\"state\": \"success\",\"context\": \"continuous-integration/jenkins/test-coverage\", \"description\": \"Test coverage is OK\", \"target_url\": \"http://192.168.99.100:8088/job/pyproj/job/master/$BUILD_NUMBER/Code_20Coverage_20Report\"}"'
+        }
+        failure {
+            sh 'curl "https://api.github.com/repos/DirtybirdInc/pyproj/statuses/$GIT_COMMIT?access_token=$GITHUB_TOKEN" -H "Content-Type: application/json" -X POST -d "{\"state\": \"failure\",\"context\": \"continuous-integration/jenkins/test-coverage\", \"description\": \"Test coverage is BAD\", \"target_url\": \"http://192.168.99.100:8088/job/pyproj/job/master/$BUILD_NUMBER/Code_20Coverage_20Report\"}"'
         }
     }
 }
