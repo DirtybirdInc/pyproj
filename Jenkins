@@ -1,18 +1,9 @@
-def updateCommitStatus(state, message) {
-    sh 'curl "https://api.github.com/repos/DirtybirdInc/pyproj/statuses/$GIT_COMMIT?access_token=$GITHUB_TOKEN" -H "Content-Type: application/json" -X POST -d \'{"state": "' + state + '", "context": "continuous-integration/jenkins/test-coverage", "description": "' + message + '", "target_url": "http://192.168.99.100:8088/job/pyproj/job/master/'+BUILD_NUMBER+'/Code_20Coverage_20Report"}\''
-}
-
-
 pipeline {
 
     agent {
         docker {
             image 'python:3.7.4-alpine3.10'
         }
-    }
-
-    environment {
-        GITHUB_TOKEN = credentials('github-commit-status')
     }
 
     stages {
@@ -37,15 +28,8 @@ pipeline {
         }
         stage('Validate Coverage') {
             steps {
-                script {
-                    sh 'apk --no-cache add curl'
-                    passed = sh(script: 'python analyze_code_coverage.py', returnStdout: true).trim()
-                    if (passed == "True") {
-                        updateCommitStatus('success', 'Test coverage is OK.')
-                    } else {
-                        updateCommitStatus('failure', 'Test coverage is BAD.')
-                    }
-                }
+                sh 'apk --no-cache add curl'
+                sh 'python analyze_code_coverage.py'
             }
         }
     }
