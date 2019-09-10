@@ -7,9 +7,13 @@ pipeline {
     }
 
     stages {
-        stage('Run Tests') {
+        stage('Install Requirements') {
             steps {
                 sh 'pip install -r requirements.txt'
+            }
+        }
+        stage('Run Unit Tests') {
+            steps {
                 sh 'py.test --verbose --cov-report html --cov-report xml --cov=myapp --junit-xml test-reports/results.xml tests/'
 	        }
             post {
@@ -26,9 +30,8 @@ pipeline {
                 }
             }
         }
-        stage('Validate Coverage') {
+        stage('Analyze Test Coverage') {
             steps {
-                sh 'apk --no-cache add curl'
                 sh 'python analyze_code_coverage.py'
             }
         }
