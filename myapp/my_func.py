@@ -1,5 +1,5 @@
 def my_func():
-    return "Hallo Welt2!"
+    return "Hallo Welt!"
 
 
 def my_other_func():
